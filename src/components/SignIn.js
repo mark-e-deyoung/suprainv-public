@@ -25,9 +25,9 @@ const SignIn = () => {
             }
           ).then(response => {
             setSignedIn(true);
-            setSignedInUsername(response.data.user_name)
+            setSignedInUsername(response.data.username)
             setSignInToken(response.data.token);
-            setSignedInUserID(response.data.user_id)
+            setSignedInUserID(response.data.id)
             console.log(response.data);
         }).catch(error => {
           console.error("Error: " + error)

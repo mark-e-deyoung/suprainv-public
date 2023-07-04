@@ -32,7 +32,7 @@ const Navigation = () => {
           </Navbar>
           </div>
 
-          <div style={{marginTop:75}}>
+          <div style={{marginTop:75,marginBottom:75}}>
             <Outlet />      
           </div>
           
