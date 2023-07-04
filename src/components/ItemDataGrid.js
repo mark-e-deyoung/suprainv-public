@@ -20,7 +20,8 @@ export default class ItemList extends React.Component {
   }
 
   componentDidMount() {
-    axios.get(`https://suprainv-api.caprover.suprahub.us/api/v1/items`)
+    let api_url = `https://suprainv-api.caprover.suprahub.us/api/v1/items`
+    axios.get(api_url)
       .then(res => {
         const rows = res.data;
         this.setState({ rows });

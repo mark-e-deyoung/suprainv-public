@@ -1,34 +1,17 @@
-import React, { useState} from 'react'
-import localforage from 'localforage';
-import PropTypes from 'prop-types';
+import React, { useContext} from 'react'
 import Alert from 'react-bootstrap/Alert';
 
-function signOutUser () {
-  localforage.removeItem('token').then(function() {
-    console.log('signOutUser localforage removed token.');
-  }).catch(function(err) {
-    console.log(err);
-  });
-}
+import {AuthContext} from '../App'
 
-const SignOut = ({setToken}) => {
-  const [signedIn,setSignedIn] = useState(false)
-
-  localforage.getItem('token').then(function(value) {
-      console.log("token: " + value);
-      if(value){
-          setSignedIn(true)
-      } else{
-        setSignedIn(false)
-      }
-    }).catch(function(err) {
-      console.log("Error: " + err);
-      setSignedIn(false)
-    })
- 
+const SignOut = () => {
+  const { signedIn, setSignedIn, signInToken, setSignInToken, signedInUsername, setSignedInUsername,signedInUserID,setSignedInUserID} = useContext(AuthContext);
+  
   if(signedIn){
-    signOutUser();
-    setToken(undefined)
+    setSignInToken('')
+    setSignedIn(false)
+    setSignedInUsername('')
+    setSignedInUserID('')
+
     return (
         <div>
           <Alert variant="primary">You have signed out.</Alert>
@@ -42,10 +25,6 @@ const SignOut = ({setToken}) => {
       )
   }
 
-}
-
-SignOut.propTypes = {
-  setToken: PropTypes.func.isRequired
 }
 
 export default SignOut

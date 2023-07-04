@@ -1,65 +1,37 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
-import localforage from 'localforage';
+
+import {AuthContext} from '../App'
 
 import Alert from 'react-bootstrap/Alert';
 import './SignIn.css';
 
-async function signinUser(user, pass) {
-        axios.post("https://suprainv-api.caprover.suprahub.us/api/v1/signin",
-         {
-            username: user,
-            password: pass
-         }
-      )
-      .then(response => {
-        // See: https://axios-http.com/docs/res_schema
-        //restructure response.data
-        // data format is defined in backend.
-        const { message, user_id, user_name,token } = response.data
-        console.log("Response status: " + response.status)
-        console.log("user_id: " + user_id)
-        console.log("username: "+ user_name)
-        console.log("token: " + token)
-        console.log("message: " + message)
-        localforage.setItem('token', token).then(function () {
-          return localforage.getItem('token');
-            }).then(function (value) {
-                console.log("Token (localforage read back):" + value)
-            }).catch(function (err) {
-                console.log("Error: " + err)
-            });
-          return token
-        }).catch(error => {
-          console.log("Error: " + error)
-      })
-}
-
-const SignIn = ({setToken}) => {
+const SignIn = () => {
+    const { signedIn, setSignedIn, signInToken, setSignInToken, signedInUsername, setSignedInUsername, signedInUserID, setSignedInUserID} = useContext(AuthContext);
     const [username, setUserName] = useState()
     const [password, setPassword] = useState()
-    const [signedIn,setSignedIn] = useState(false)
+
     const navigate = useNavigate()
     
-    localforage.getItem('token').then(function(value) {
-        console.log("token: " + value);
-        if(value){
-            setToken(value)
-            setSignedIn(true)
-        } else{
-          setSignedIn(false)
-        }
-      }).catch(function(err) {
-        console.log("Error: " + err);
-        setSignedIn(false)
-      })
-
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = await signinUser(username, password);
-        console.log("handleSubmit - token (should be valid?): " + token)
-        // redirect to /
+        
+        let api_url= "https://suprainv-api.caprover.suprahub.us/api/v1/signin"
+        const response = await axios.post(api_url,
+            {
+                username: username,
+                password: password
+            }
+          ).then(response => {
+            setSignedIn(true);
+            setSignedInUsername(response.data.user_name)
+            setSignInToken(response.data.token);
+            setSignedInUserID(response.data.user_id)
+            console.log(response.data);
+        }).catch(error => {
+          console.error("Error: " + error)
+      })
         navigate("/", {replace: true})
     }
 
@@ -90,6 +62,7 @@ const SignIn = ({setToken}) => {
             <Alert variant="light">Sign up for an account if you do not have one.</Alert>
           </div>
         </div>
+
       )
     }
 

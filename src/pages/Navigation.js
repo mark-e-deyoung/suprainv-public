@@ -1,13 +1,12 @@
-import React, { useState } from 'react'
-import localforage from 'localforage'
-
+import React, { useContext } from 'react'
 import { Outlet } from "react-router-dom";
-
 import {Button, Navbar, Nav} from 'react-bootstrap'
 import { LinkContainer } from 'react-router-bootstrap'
 
-const Navigation = () => {
+import {AuthContext} from '../App'
 
+const Navigation = () => {
+  const { signedInUsername,signedInUserID } = useContext(AuthContext);
   return (
       <div>
         <div>
@@ -28,7 +27,6 @@ const Navigation = () => {
                   <LinkContainer to="/signout">
                     <Button variant="primary">Sign Out</Button>
                   </LinkContainer>
-     
                 </Nav>
             </Navbar.Collapse>      
           </Navbar>
@@ -45,9 +43,13 @@ const Navigation = () => {
               </LinkContainer>
               <LinkContainer to="/new">
                     <Button variant="primary">Add Item</Button>
-                  </LinkContainer>   
+              </LinkContainer>
+              <LinkContainer to="/profile">
+                <Navbar.Brand><div style={{margin: 10}}>{signedInUsername}</div></Navbar.Brand>
+            </LinkContainer>       
             </Navbar>
           </div>
+
       </div>
   )
 };

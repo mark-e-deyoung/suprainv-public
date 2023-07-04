@@ -1,27 +1,13 @@
 import React, { useState } from 'react'
-import localforage from 'localforage'
 
 import Alert from 'react-bootstrap/Alert';
 
 import ItemTable from '../components/ItemTable'
 
+import {AuthContext} from '../App'
+
 const EditPage = () => {
-    const [signInToken, setSignInToken] = useState()
-    const [signedIn,setSignedIn] = useState(false)
-
-    localforage.getItem('token').then(function(value) {
-        setSignInToken(value)
-        console.log("token: " + value);
-        if(value){
-            setSignedIn(true)
-        } else {
-          setSignedIn(false)
-        }
-      }).catch(function(err) {
-        console.log("Error: " + err);
-        setSignedIn(false)
-      })
-
+    const { signedIn } = useContext(AuthContext);
     
     if(!signedIn){
         return (

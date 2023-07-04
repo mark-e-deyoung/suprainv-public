@@ -2,37 +2,21 @@
 
 In the project root instantiate a react app using [Create React App](https://create-react-app.dev/)
 
-
 ```
-npx create-react-app frontend
+npx create-react-app suprainv
 ```
-
-The following support packages are used:
-```
-npm install axios axios-jwt
-npm install react-router-dom
-npm install bootstrap
-npm install history
-npm install redux redux-thunk react-redux
-npm install --save-dev redux-devtools-extension
-npm install react-validation validator
-```
-
-npm install react-data-grid
 
 To run locally with nodemon
 ```
 npx nodemon --exec npm start
 ```
 
+# Notes
 Updated packages with [npm-check-updates](https://www.npmjs.com/package/npm-check-updates)
 ```
 npm i -g npm-check-updates
 ncu -u
 npm install
 ```
-
 # References
-[axios-jwt](https://github.com/jetbridge/axios-jwt)
-
-[use-axios-client](https://use-axios-client.io/) had to install with --force flag.
+- [Axios > Handling Errors](https://github.com/axios/axios#handling-errors)

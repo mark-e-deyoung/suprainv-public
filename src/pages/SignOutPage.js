@@ -1,24 +1,13 @@
-import React, { useState } from 'react'
+import React, { useContext } from 'react'
 import localforage from 'localforage'
 import Alert from 'react-bootstrap/Alert';
 
 import SignOut from '../components/SignOut'
 
-const SignOutPage = (props) => {
-    const [signedIn,setSignedIn] = useState(false)
+import {AuthContext} from '../App'
 
-    localforage.getItem('token').then(function(value) {
-        console.log("token: " + value);
-        if(value){
-            setSignedIn(true)
-        } else {
-          setSignedIn(false)
-        }
-      }).catch(function(err) {
-        console.log("Error: " + err);
-        setSignedIn(false)
-      })
-
+const SignOutPage = () => {
+  const { signedIn } = useContext(AuthContext);
       if(signedIn){
             return(
                 <div>
@@ -32,7 +21,6 @@ const SignOutPage = (props) => {
           </div>
         )
      }
-
 
   };
   

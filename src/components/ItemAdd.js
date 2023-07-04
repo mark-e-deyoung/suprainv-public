@@ -1,40 +1,59 @@
-import React, { useState } from 'react';
+import React, { useState,useContext } from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
+import Alert from 'react-bootstrap/Alert';
 
-async function addItem(name, desc, quant) {
-        console.log("requires JWT authentication token")
-        axios.post("https://suprainv-api.caprover.suprahub.us/api/v1/item",
-         {
-            item_name: name,
-            item_desctiption: desc,
-            quantity: quant
-         }
-      )
-      .then(response => {
-        // See: https://axios-http.com/docs/res_schema
-        //restructure response.data
-        // data format is defined in backend.
-        const { message, user_id, user_name,token } = response.data
-        console.log("Response status: " + response.status)
-        console.log("message: " + message)
-      })
-}
+import {AuthContext} from '../App'
 
 const ItemAdd = () => {
+    const {signedIn, signInToken,signedInUserID} = useContext(AuthContext);
     const [item_name, setItemName] = useState()
     const [item_description, setItemDescription] = useState()
     const [quantity, setQuantity] = useState()
     const navigate = useNavigate()
     
     const handleSubmit = async e => {
-        e.preventDefault();
-        const token = await addItem(item_name,item_description,quantity);
-        console.log("handleSubmit - token (should be valid?): " + token)
-        // redirect to /
-        navigate("/", {replace: true})
+      e.preventDefault();
+      console.log('signInToken: ' + signInToken)
+      console.log('signedIn: ' + signedIn)
+      console.log('signedInUserID: '+ signedInUserID) 
+      let api_url= "https://suprainv-api.caprover.suprahub.us/api/v1/new_item"
+      const response = await axios.post(api_url,
+          {
+              //user_id: signedInUserID,
+              item_name: item_name,
+              item_description: item_description,
+              quantity: quantity
+          },
+          {
+              headers: {
+              Authorization: `Bearer ${signInToken}`,
+              },
+          }
+        ).then(response => {
+          console.log(response.data);
+      }).catch(error => {
+        if (error.response) {
+          // The request was made and the server responded with a status code
+          // that falls out of the range of 2xx
+          console.log(error.response.data);
+          console.log(error.response.status);
+          console.log(error.response.headers);
+        } else if (error.request) {
+          // The request was made but no response was received
+          // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+          // http.ClientRequest in node.js
+          console.log(error.request);
+        } else {
+          // Something happened in setting up the request that triggered an Error
+          console.log('Error', error.message);
+        }
+        console.log(error.config);
+    })
+      navigate("/", {replace: true})
     }
 
+    if(signedIn){
       return(
         <div className="signup-wrapper">
           <h1>Please add new Item.</h1>
@@ -57,6 +76,15 @@ const ItemAdd = () => {
           </form>
         </div>
       )
+
+    } else {
+      return(
+        <div>
+          <Alert variant="primary">Please sign in to add a new Item.</Alert>
+        </div>
+      )
+    }
+
     }
 
 export default ItemAdd

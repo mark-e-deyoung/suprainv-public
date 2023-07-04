@@ -14,7 +14,8 @@ export default class ItemList extends React.Component {
   componentDidMount() {
 
     // get all items
-    axios.get(`https://suprainv-api.caprover.suprahub.us/api/v1/items`)
+    let api_url=`https://suprainv-api.caprover.suprahub.us/api/v1/items`
+    axios.get(api_url)
       .then(res => {
         const items = res.data;
         this.setState({ items });

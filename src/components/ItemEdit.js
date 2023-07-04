@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 async function updateItem(item_id, item_name, item_description, quantity) {
         // requires JWT to authenticate
-        let api_url= "https://suprainv-api.caprover.suprahub.us/api/v1/item"+ item_id
+        let api_url=  "https://suprainv-api.caprover.suprahub.us/api/v1/item"+ item_id
         axios.put(api_url,
          {
             item_name: item_name,
@@ -16,7 +16,7 @@ async function updateItem(item_id, item_name, item_description, quantity) {
       ).then(response => {
           console.log("Response: " + response)
       }).catch(function (err) {
-          console.log("Error: " + err)
+          console.error("Error: " + err)
       })
       
 }

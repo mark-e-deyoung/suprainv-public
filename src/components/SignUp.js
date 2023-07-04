@@ -1,43 +1,40 @@
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import {useNavigate} from 'react-router-dom';
 import axios from "axios";
-import localforage from 'localforage';
 
-import Alert from 'react-bootstrap/Alert';
+import {AuthContext} from '../App'
 
+const SignUp = () => {
+    const { signedIn } = useContext(AuthContext);
+    const [username, setUserName] = useState()
+    const [first_name, setFirstName] = useState()
+    const [last_name, setLastName] = useState()
+    const [password, setPassword] = useState()
 
-async function signupUser(user,first,last,pass) {
-        axios.post("https://suprainv-api.caprover.suprahub.us/api/v1/signup",
-         {
+    const navigate = useNavigate()
+  
+    async function signupUser(user,first,last,pass) {
+        let api_url= "https://suprainv-api.caprover.suprahub.us/api/v1/signup"
+        const response = axios.post(api_url,
+        {
             username: user,
             first_name: first,
             last_name: last, 
             password: pass
-         }
+        }
       )
       .then(response => {
         // See: https://axios-http.com/docs/res_schema
         //restructure response.data
         // data format is defined in backend.
-        const { message, user_id, user_name,token } = response.data
         console.log("Response status: " + response.status)
-        console.log("message: " + message)
+        console.log("Response data.message: " + response.data.message)
       })
-}
-
-const SignUp = () => {
-    const [username, setUserName] = useState()
-    const [first_name, setFirstName] = useState()
-    const [last_name, setLastName] = useState()
-    const [password, setPassword] = useState()
-    const [signedIn,setSignedIn] = useState(false)
-    const navigate = useNavigate()
-    
+    }
     const handleSubmit = async e => {
         e.preventDefault();
-        const token = await signupUser(username,first_name,last_name, password);
-        console.log("handleSubmit - token (should be valid?): " + token)
-        // redirect to /
+        const response = await signupUser(username,first_name,last_name, password);
+        console.log("Response: "+ response)
         navigate("/", {replace: true})
     }
 
