@@ -7,9 +7,9 @@ import {AuthContext} from '../App'
 
 const ItemAdd = () => {
     const {signedIn, signInToken,signedInUserID} = useContext(AuthContext);
-    const [item_name, setItemName] = useState()
-    const [item_description, setItemDescription] = useState()
-    const [quantity, setQuantity] = useState()
+    const [item_name, setItemName] = useState('')
+    const [item_description, setItemDescription] = useState('')
+    const [quantity, setQuantity] = useState(0)
     const navigate = useNavigate()
     
     const handleSubmit = async e => {
